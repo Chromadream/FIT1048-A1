@@ -76,9 +76,10 @@ string uncover(Tile(&array)[rows][cols], int row, int col)
 		{
 			for (int j = col - 1; j < col + 2; j++)
 			{
-				if ((i >= 0 || i < rows) && (j >= 0 || j < cols) && !array[i][j].isMine)
+				if ((i >= 0 || i < rows) && (j >= 0 || j < cols) && !array[i][j].isMine && array[i][j].isCovered)
 				{
-					array[i][j].isCovered = false;
+					//array[i][j].uncoverCheck = true;
+					uncover(array,i,j);
 				}
 			}
 		}
@@ -185,7 +186,7 @@ struct Tile
 
 int main(void)
 {
-	const int ARRAY_SIZE = 5;
+	const int ARRAY_SIZE = 10;
 	int currentMine = 0, mineQty = 10;
 	string statusMessage ="not hit";
 	char command;
