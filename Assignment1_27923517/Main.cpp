@@ -189,8 +189,6 @@ int main(void)
 	const int ARRAY_SIZE = 10;
 	int currentMine = 0, mineQty = 10;
 	string statusMessage ="not hit";
-	char command;
-	string commandText;
 	Tile Board[ARRAY_SIZE][ARRAY_SIZE];
 	srand(time(NULL));
 	mineGen(Board, mineQty);//mine generation
