@@ -9,52 +9,56 @@
 using namespace std;
 struct Tile;
 
-void tileCount(vector< vector<Tile> > &matrix, int row, int col)
+void tileCount(vector< vector<Tile> > &Board, int row, int col)
 {
+	int const ROW_SIZE = Board.size();
+	int const COL_SIZE = Board[0].size();
 	int i,j, mineAround = 0;
 	for (i = row - 1; i <= row + 1; i++)
 	{
 		for (j = col - 1; j <= col + 1; j++)
 		{
-			if ((i >= 0 || i < rows) && (j >= 0 || j < cols) && array[i][j].isMine == true)
+			if ((i >= 0 || i < ROW_SIZE) && (j >= 0 || j < COL_SIZE) && Board[i][j].isMine == true)
 			{
 				mineAround += 1;
 			}
 		}
 	}
-	array[row][col].mineAround = mineAround;
+	Board[row][col].mineAround = mineAround;
 };
 
-void Printing(vector< vector<Tile> > &matrix)
+void Printing(vector< vector<Tile> > &Board)
 {
+	int const ROW_SIZE = Board.size();
+	int const COL_SIZE = Board[0].size();
 	cout << "Welcome to Minesweeper beta\n" << endl;
-	for (int a = 0; a < rows; a++)
+	for (int a = 0; a < ROW_SIZE; a++)
 	{
 		cout << "    " << a;
 	}
 	cout << endl;
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < ROW_SIZE; i++)
 	{
 		cout << i << "  ";
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < COL_SIZE; j++)
 		{
-			if (array[i][j].isMarked)
+			if (Board[i][j].isMarked)
 			{
 				cout << "[M]" << "  ";
 			}
-			else if (array[i][j].isCovered)
+			else if (Board[i][j].isCovered)
 			{
 				cout << "[ ]" << "  ";
 			}
 			else 
 			{
-				if (array[i][j].isMine)
+				if (Board[i][j].isMine)
 				{
 					cout << "[*]" << "  ";
 				}
 				else
 				{
-					cout << "["<<array[i][j].mineAround<<"]" << "  ";
+					cout << "["<<Board[i][j].mineAround<<"]" << "  ";
 				}
 			};
 		};
@@ -63,58 +67,62 @@ void Printing(vector< vector<Tile> > &matrix)
 	cout << endl;
 };
 
-string uncover(vector< vector<Tile> > &matrix, int row, int col)
+string uncover(vector< vector<Tile> > &Board, int row, int col)
 {
+	int const ROW_SIZE = Board.size();
+	int const COL_SIZE = Board[0].size();
 	string statusMessage = "not hit";
-	if (array[row][col].isMarked == true)
+	if (Board[row][col].isMarked == true)
 	{
 		statusMessage = "Can't uncover marked tile";
 	}
-	else if (array[row][col].mineAround == 0)
+	else if (Board[row][col].mineAround == 0)
 	{
-		array[row][col].isCovered = false;
+		Board[row][col].isCovered = false;
 		for (int i = row - 1; i < row + 2; i++)
 		{
 			for (int j = col - 1; j < col + 2; j++)
 			{
-				if ((i >= 0 || i < rows) && (j >= 0 || j < cols) && !array[i][j].isMine && array[i][j].isCovered)
+				if ((i >= 0 || i < ROW_SIZE) && (j >= 0 || j < COL_SIZE) && !Board[i][j].isMine && Board[i][j].isCovered)
 				{
-					//array[i][j].uncoverCheck = true;
-					uncover(array,i,j);
+					//Board[i][j].uncoverCheck = true;
+					uncover(Board,i,j);
 				}
 			}
 		}
 	}
-	else if (array[row][col].isMine == true)
+	else if (Board[row][col].isMine == true)
 	{
-		array[row][col].isCovered = false;
+		Board[row][col].isCovered = false;
 		statusMessage = "hit";
 	}
 	else
 	{
-		array[row][col].isCovered = false;
+		Board[row][col].isCovered = false;
 	};
 	return statusMessage;
 }
 
-void mark(vector< vector<Tile> > &matrix, int row, int col)
+void mark(vector< vector<Tile> > &Board, int row, int col)
 {
-	if (array[row][col].isMarked == false)
+	if (Board[row][col].isMarked == false)
 	{
-		array[row][col].isMarked = true;
+		Board[row][col].isMarked = true;
 	}
 	else
 	{
-		array[row][col].isMarked = false;
+		Board[row][col].isMarked = false;
 	};
 }
 
 
-void input(string statusMessage, vector< vector<Tile> > &matrix, int rowsize, int colsize)
+void input(string statusMessage, vector< vector<Tile> > &Board)
 {
 	char command;
 	string commandText;
 	int inputRow, inputCol;
+	int const ROW_SIZE = Board.size();
+	int const COL_SIZE = Board[0].size();
 	while (statusMessage != "hit")
 	{
 		if (statusMessage != "hit" && statusMessage != "not hit")
@@ -139,7 +147,7 @@ void input(string statusMessage, vector< vector<Tile> > &matrix, int rowsize, in
 			}
 			cout << "Please enter the desired area you want to " << commandText << endl;
 			cin >> inputRow >> inputCol;
-			if ((inputRow < 0 || inputRow >= ARRAY_SIZE) || (inputCol < 0 || inputCol >= ARRAY_SIZE))
+			if ((inputRow < 0 || inputRow >= ROW_SIZE) || (inputCol < 0 || inputCol >= COL_SIZE))
 			{
 				statusMessage = "Input outside of board size range.";
 			}
@@ -155,12 +163,12 @@ void input(string statusMessage, vector< vector<Tile> > &matrix, int rowsize, in
 				};
 			};
 		};
-		system("cls");
+		std::system("cls");
 		Printing(Board);
 	};
 }
 
-void mineGen(vector< vector<Tile> > &matrix, int mineQty)
+void mineGen(vector< vector<Tile> > &Board, int mineQty)
 {
 	int currentMineCount = 0;
 	int rowGen, colGen;
@@ -203,8 +211,8 @@ int main(void)
 		}
 	};
 	Printing(Board);//printing the board for the first time
-	input(statusMessage, Board, ROW, COL);
-	system("pause");
+	input(statusMessage, Board);
+	std::system("pause");
 	return 0;
 };
 
