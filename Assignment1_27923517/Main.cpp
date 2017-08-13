@@ -3,12 +3,13 @@
 #include <stdlib.h>     
 #include <time.h>   
 #include <string>
+#include <vector>
 
 
 using namespace std;
 struct Tile;
-template <size_t rows, size_t cols>
-void tileCount(Tile(&array)[rows][cols], int row, int col)
+
+void tileCount(vector< vector<Tile> > &matrix, int row, int col)
 {
 	int i,j, mineAround = 0;
 	for (i = row - 1; i <= row + 1; i++)
@@ -23,8 +24,8 @@ void tileCount(Tile(&array)[rows][cols], int row, int col)
 	}
 	array[row][col].mineAround = mineAround;
 };
-template <size_t rows, size_t cols>
-void Printing(Tile(&array)[rows][cols])
+
+void Printing(vector< vector<Tile> > &matrix)
 {
 	cout << "Welcome to Minesweeper beta\n" << endl;
 	for (int a = 0; a < rows; a++)
@@ -61,8 +62,8 @@ void Printing(Tile(&array)[rows][cols])
 	};
 	cout << endl;
 };
-template <size_t rows, size_t cols>
-string uncover(Tile(&array)[rows][cols], int row, int col)
+
+string uncover(vector< vector<Tile> > &matrix, int row, int col)
 {
 	string statusMessage = "not hit";
 	if (array[row][col].isMarked == true)
@@ -95,8 +96,8 @@ string uncover(Tile(&array)[rows][cols], int row, int col)
 	};
 	return statusMessage;
 }
-template <size_t rows, size_t cols>
-void mark(Tile(&array)[rows][cols], int row, int col)
+
+void mark(vector< vector<Tile> > &matrix, int row, int col)
 {
 	if (array[row][col].isMarked == false)
 	{
@@ -108,8 +109,8 @@ void mark(Tile(&array)[rows][cols], int row, int col)
 	};
 }
 
-template <size_t rows, size_t cols>
-void input(string statusMessage, Tile(&Board)[rows][cols], int ARRAY_SIZE)
+
+void input(string statusMessage, vector< vector<Tile> > &matrix, int rowsize, int colsize)
 {
 	char command;
 	string commandText;
@@ -159,8 +160,7 @@ void input(string statusMessage, Tile(&Board)[rows][cols], int ARRAY_SIZE)
 	};
 }
 
-template <size_t rows, size_t cols>
-void mineGen(Tile(&Board)[rows][cols], int mineQty)
+void mineGen(vector< vector<Tile> > &matrix, int mineQty)
 {
 	int currentMineCount = 0;
 	int rowGen, colGen;
@@ -186,23 +186,24 @@ struct Tile
 
 int main(void)
 {
-	const int ARRAY_SIZE = 10;
+	const int ROW = 10;
+	const int COL = 10;
 	int currentMine = 0, mineQty = 10;
 	string statusMessage ="not hit";
 	char command;
 	string commandText;
-	Tile Board[ARRAY_SIZE][ARRAY_SIZE];
+	vector<vector<Tile>> Board(ROW, vector<Tile>(COL));
 	srand(time(NULL));
 	mineGen(Board, mineQty);//mine generation
-	for (int i = 0; i < ARRAY_SIZE; i++)
+	for (int i = 0; i < ROW; i++)
 	{
-		for (int j = 0; j < ARRAY_SIZE; j++)
+		for (int j = 0; j < COL; j++)
 		{
 			tileCount(Board, i, j);//counting the mines around the tile
 		}
 	};
 	Printing(Board);//printing the board for the first time
-	input(statusMessage, Board, ARRAY_SIZE);
+	input(statusMessage, Board, ROW, COL);
 	system("pause");
 	return 0;
 };
