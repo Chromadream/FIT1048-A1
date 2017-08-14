@@ -8,12 +8,51 @@
 
 using namespace std;
 struct Tile;
+void tileCount(vector< vector<Tile> > &Board, int row, int col);
+void Printing(vector< vector<Tile> > &Board);
+string uncover(vector< vector<Tile> > &Board, int row, int col);
+void mark(vector< vector<Tile> > &Board, int row, int col);
+void input(string statusMessage, vector< vector<Tile> > &Board);
+void mineGen(vector< vector<Tile> > &Board, int mineQty);
+void BoardInit(vector< vector<Tile> > &Board, int rowsize, int colsize);
+
+
+struct Tile
+{
+	bool isCovered = true;
+	bool isMarked = false;
+	bool isMine = false;
+	int mineAround = 0;
+};
+
+int main(void)
+{
+	const int ROW = 10;
+	const int COL = 10;
+	int currentMine = 0, mineQty = 10;
+	string statusMessage ="not hit";
+	vector<vector<Tile>> Board(COL, vector<Tile>(COL, Tile()));
+	//BoardInit(Board, ROW, COL);
+	srand(time(NULL));
+	mineGen(Board, mineQty);//mine generation
+	for (int i = 0; i < ROW; i++)
+	{
+		for (int j = 0; j < COL; j++)
+		{
+			tileCount(Board, i, j);//counting the mines around the tile
+		}
+	};
+	Printing(Board);//printing the board for the first time
+	input(statusMessage, Board);
+	std::system("pause");
+	return 0;
+};
 
 void tileCount(vector< vector<Tile> > &Board, int row, int col)
 {
 	int const ROW_SIZE = Board.size();
 	int const COL_SIZE = Board[0].size();
-	int i,j, mineAround = 0;
+	int i, j, mineAround = 0;
 	for (i = row - 1; i <= row + 1; i++)
 	{
 		for (j = col - 1; j <= col + 1; j++)
@@ -50,7 +89,7 @@ void Printing(vector< vector<Tile> > &Board)
 			{
 				cout << "[ ]" << "  ";
 			}
-			else 
+			else
 			{
 				if (Board[i][j].isMine)
 				{
@@ -58,7 +97,7 @@ void Printing(vector< vector<Tile> > &Board)
 				}
 				else
 				{
-					cout << "["<<Board[i][j].mineAround<<"]" << "  ";
+					cout << "[" << Board[i][j].mineAround << "]" << "  ";
 				}
 			};
 		};
@@ -86,7 +125,7 @@ string uncover(vector< vector<Tile> > &Board, int row, int col)
 				if ((i >= 0 || i < ROW_SIZE) && (j >= 0 || j < COL_SIZE) && !Board[i][j].isMine && Board[i][j].isCovered)
 				{
 					//Board[i][j].uncoverCheck = true;
-					uncover(Board,i,j);
+					uncover(Board, i, j);
 				}
 			}
 		}
@@ -114,7 +153,6 @@ void mark(vector< vector<Tile> > &Board, int row, int col)
 		Board[row][col].isMarked = false;
 	};
 }
-
 
 void input(string statusMessage, vector< vector<Tile> > &Board)
 {
@@ -172,10 +210,12 @@ void mineGen(vector< vector<Tile> > &Board, int mineQty)
 {
 	int currentMineCount = 0;
 	int rowGen, colGen;
+	int rowSize = Board.size();
+	int colSize = Board[0].size();
 	while (currentMineCount < mineQty)
 	{
-		rowGen = rand() % mineQty;
-		colGen = rand() % mineQty;
+		rowGen = rand() % rowSize;
+		colGen = rand() % colSize;
 		if (!Board[rowGen][colGen].isMine)
 		{
 			Board[rowGen][colGen].isMine = true;
@@ -184,35 +224,14 @@ void mineGen(vector< vector<Tile> > &Board, int mineQty)
 	};
 }
 
-struct Tile
+void BoardInit(vector< vector<Tile> > &Board, int rowsize, int colsize)
 {
-	bool isCovered = true;
-	bool isMarked = false;
-	bool isMine = false;
-	int mineAround = 0;
-};
-
-int main(void)
-{
-	const int ROW = 10;
-	const int COL = 10;
-	int currentMine = 0, mineQty = 10;
-	string statusMessage ="not hit";
-	char command;
-	string commandText;
-	vector<vector<Tile>> Board(ROW, vector<Tile>(COL));
-	srand(time(NULL));
-	mineGen(Board, mineQty);//mine generation
-	for (int i = 0; i < ROW; i++)
+	for (int i = 0; i < Board.size(); i++)
 	{
-		for (int j = 0; j < COL; j++)
+		for (int j = 0; j < Board[i].size(); j++)
 		{
-			tileCount(Board, i, j);//counting the mines around the tile
+			//Board[i][j]=new Tile();
 		}
-	};
-	Printing(Board);//printing the board for the first time
-	input(statusMessage, Board);
-	std::system("pause");
-	return 0;
+	}
 };
 
