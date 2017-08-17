@@ -34,7 +34,7 @@ int main(void)
 		}
 	};
 	BoardPrinting(Board);//printing the board for the first time
-	gameInput(statusMessage, Board);
+	gameInput(statusMessage, Board, mineQty);
 	std::system("pause");
 	return 0;
 };

@@ -63,7 +63,7 @@ void BoardPrinting(vector< vector<Tile> > &Board)
 	cout << endl;
 };
 
-string uncover(vector< vector<Tile> > &Board, int row, int col)
+string uncover(vector< vector<Tile> > &Board, int row, int col, int &uncoveredTiles)
 {
 	int const ROW_SIZE = Board.size();
 	int const COL_SIZE = Board[0].size();
@@ -75,6 +75,7 @@ string uncover(vector< vector<Tile> > &Board, int row, int col)
 	else if (Board[row][col].mineAround == 0)
 	{
 		Board[row][col].isCovered = false;
+		uncoveredTiles--;
 		for (int i = row - 1; i < row + 2; i++)
 		{
 			for (int j = col - 1; j < col + 2; j++)
@@ -83,7 +84,7 @@ string uncover(vector< vector<Tile> > &Board, int row, int col)
 				{
 					if (!Board[i][j].isMine && Board[i][j].isCovered)
 					{
-						uncover(Board, i, j);
+						uncover(Board, i, j, uncoveredTiles);
 					}
 				}
 			}
@@ -93,10 +94,12 @@ string uncover(vector< vector<Tile> > &Board, int row, int col)
 	{
 		Board[row][col].isCovered = false;
 		statusMessage = "hit";
+		uncoveredTiles--;
 	}
 	else
 	{
 		Board[row][col].isCovered = false;
+		uncoveredTiles--;
 	};
 	return statusMessage;
 }
@@ -113,14 +116,15 @@ void mark(vector< vector<Tile> > &Board, int row, int col)
 	};
 }
 
-void gameInput(string statusMessage, vector< vector<Tile> > &Board)
+void gameInput(string statusMessage, vector< vector<Tile> > &Board, int mineQty)
 {
 	char command;
 	string commandText;
 	int inputRow, inputCol;
 	int const ROW_SIZE = Board.size();
 	int const COL_SIZE = Board[0].size();
-	while (statusMessage != "hit")
+	int uncoveredTiles = ROW_SIZE*COL_SIZE;
+	while (statusMessage != "hit"|| uncoveredTiles != mineQty)
 	{
 		if (statusMessage != "hit" && statusMessage != "not hit")
 		{
@@ -152,7 +156,7 @@ void gameInput(string statusMessage, vector< vector<Tile> > &Board)
 			{
 				if (command == 'U')
 				{
-					statusMessage = uncover(Board, inputRow, inputCol);
+					statusMessage = uncover(Board, inputRow, inputCol, uncoveredTiles);
 				}
 				else if (command == 'M')
 				{
@@ -162,6 +166,7 @@ void gameInput(string statusMessage, vector< vector<Tile> > &Board)
 		};
 		BoardPrinting(Board);
 	};
+	endgameHandling(uncoveredTiles,statusMessage,mineQty);
 }
 
 void mineGen(vector< vector<Tile> > &Board, int mineQty)
@@ -191,5 +196,17 @@ void BoardResize(vector<vector<Tile>>& Board)
 	for (int i = 0; i < row; i++)
 	{
 		Board[i].resize(col);
+	}
+}
+
+void endgameHandling(int &uncoveredTiles, string statusMessage, int mineQty)
+{
+	if (uncoveredTiles == mineQty || statusMessage == "not hit")
+	{
+		cout << "Game completed, you win." << endl;
+	}
+	else
+	{
+		cout << "You hit a mine. Game over." << endl;
 	}
 }
