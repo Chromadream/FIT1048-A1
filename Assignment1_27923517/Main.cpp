@@ -1,6 +1,14 @@
 #include "functionality.h"
 
 /*
+ * Main.cpp
+ *
+ * The file that contains the main workflow of the Minesweeper game
+ *
+ */
+
+
+/*
  * global var for row and column size
  * as it is reused on many functions
  */
