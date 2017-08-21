@@ -1,6 +1,9 @@
 #include "functionality.h"
 
 /*
+ * FIT1048_AA1
+ * 27923517/jnic14
+ *
  * functionality.cpp
  * 
  * The file that includes all of the neccessary functionalities

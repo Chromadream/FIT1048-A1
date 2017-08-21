@@ -1,6 +1,9 @@
 #include "functionality.h"
 
 /*
+ * FIT1048_AA1
+ * 27923517/jnic14
+ *
  * Main.cpp
  *
  * The file that contains the main workflow of the Minesweeper game

@@ -1,6 +1,9 @@
 #pragma once
 
 /*
+ * FIT1048_AA1
+ * 27923517/jnic14
+ *
  * functionality.h
  *
  * Header file that contains all neccessary #include,
