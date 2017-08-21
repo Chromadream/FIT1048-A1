@@ -84,6 +84,7 @@ int mineNumber(int rowsize, int colsize)
 
 void mineGen(vector< vector<Tile> > &Board, int mineQty)
 {
+	srand(time(NULL));//initializing random number generator
 	int currentMineCount = 0;
 	int rowGen, colGen;
 	while (currentMineCount < mineQty)
@@ -153,7 +154,14 @@ void BoardPrinting(vector< vector<Tile> > &Board, int &mineLeft)
 	cout << "There are "<<mineLeft<<" mines left\n" << endl;
 	for (int a = 0; a < COL_SIZE; a++)
 	{
-		cout << "    " << a;//printing column number
+		if (a < 10)
+		{
+			cout << "    " << a;//printing column number
+		}
+		else
+		{
+			cout << "   " << a;//printing column number, where the number > 10
+		}
 	}
 	cout << endl;
 	for (int i = 0; i < ROW_SIZE; i++)

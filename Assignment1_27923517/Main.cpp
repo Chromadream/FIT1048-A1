@@ -24,7 +24,6 @@ int main(void)
 	int mineLeft;
 	string statusMessage ="not hit";
 	vector<vector<Tile>> Board(ROW_SIZE, vector<Tile>(COL_SIZE, Tile()));
-	srand(time(NULL));//initializing random number generator
 	//initial playing area configurations
 	cout << "Welcome to Minesweeper\n" << endl;
 	cout << "Do you want to change the board size? (Default= 10x10) (Y/N)  ";
